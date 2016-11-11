@@ -135,7 +135,7 @@ class UniqueKey {
   String makeUniqueId(ResultSet rs, boolean encode) throws SQLException {
     if (!encode) {
       if (names.size() == 1) {
-        return rs.getString(names.get(0));
+        return rs.getString(names.get(0)).replaceAll(" ", "%20");
       }
       throw new AssertionError("not encoding implies exactly one parameter");
     }
@@ -170,7 +170,7 @@ class UniqueKey {
       }
       sb.append("/").append(part);
     }
-    return sb.toString().substring(1);
+    return sb.toString().substring(1).replaceAll(" ", "%20");
   }
 
   private void setSqlValues(PreparedStatement st, String uniqueId,

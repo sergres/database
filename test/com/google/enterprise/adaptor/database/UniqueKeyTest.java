@@ -159,6 +159,26 @@ public class UniqueKeyTest {
   }
 
   @Test
+  public void testProcessingDocIdWithSpace() throws SQLException {
+    UniqueKey uk = new UniqueKey("a:string");
+    assertEquals("5%205", uk.makeUniqueId(makeMockResultSet(
+            new HashMap<String, Object>(){{
+              put("a", "5 5");
+            }}
+    ), /*encode=*/ false));
+  }
+
+  @Test
+  public void testProcessingDocIdWithTwoSpaces() throws SQLException {
+    UniqueKey uk = new UniqueKey("a:string,b:string");
+    assertEquals("5%205/6%206", uk.makeUniqueId(makeMockResultSet(
+            new HashMap<String, Object>(){{
+              put("a", "5 5");
+              put("b", "6 6");
+            }}
+    ), /*encode=*/ true));
+  }
+  @Test
   public void testProcessingDocIdWithMoreSlashes() throws SQLException {
     UniqueKey uk = new UniqueKey("a:string,b:string");
     assertEquals("5_/5_/_/_//_/_/6_/6",
